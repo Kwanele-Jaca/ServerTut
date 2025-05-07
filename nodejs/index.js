@@ -1,4 +1,5 @@
 const http = require('node:http');
+const {createFile,getMovies}=require('./FileManager')
 
 const hostname = '127.0.0.1';
 const port = 3001;
@@ -33,6 +34,11 @@ const server = http.createServer((req, res) => {
         const handle = (array, name) => {
             if (method === 'GET') {
                 res.statusCode = 200;
+                getMovies().then(result =>{
+                    console.log({result})
+                }).catch(err => {
+                    console.log({err})
+                })
                 res.end(JSON.stringify(array));
             } else if (method === 'POST') {
                 array.push(data.item);
@@ -65,7 +71,7 @@ const server = http.createServer((req, res) => {
         }
     });
 });
-
+createFile()
 server.listen(port, hostname, () => {
     console.log(`Server running at http://${hostname}:${port}/`);
 });
